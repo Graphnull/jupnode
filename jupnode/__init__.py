@@ -31,6 +31,7 @@ def modify_for_node_for_new_version(lines):
 
 class NodeInputTransformer():
     def __init__(self):
+        self.lines=[]
         self.lineNumber=0
         self.isPython=False
     def push(self, line):
@@ -40,7 +41,8 @@ class NodeInputTransformer():
         if self.isPython ==True:
             return line
         if self.lineNumber==0:
-            nodeapp.write('(async ()=>{\n'+line)
+            self.lines.append('(async ()=>{')
+            self.lines.append(line)
         else:
             nodeapp.write(line)
         self.lineNumber+=1
@@ -50,7 +52,9 @@ class NodeInputTransformer():
     def reset(self):
         if self.lineNumber!=0:
           self.lineNumber=0
-          nodeapp.write('})()')
+          self.lines.append('})()')
+          nodeapp.write('\n'.join(self.lines))
+        self.lines=[]
         self.lineNumber=0
         self.isPython=False
         pass
