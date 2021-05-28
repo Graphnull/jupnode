@@ -60,24 +60,6 @@ class VarWatcher(object):
         for key in self.shell.user_ns:
             v = self.shell.user_ns[key]
             t = type(v)
-            # if this is one of our variables, is a number or a string or a float
-            if not key.startswith('_') and (not key in RESERVED) and (t in VARIABLE_TYPES):
-                # if it's not in our cache or it is an its value has changed
-                if not key in self.cache or not self.inCache(key, v):
-                    # move it to JavaScript land and add it to our cache
-                    dumped = json.dumps(v)
-                    self.n.write("var " + key + " = " + dumped + ";\r\n")
-                    self.setCache(key, v)
-            elif not key.startswith('_') and (not key in RESERVED) and (t == np.ndarray) and (v.size > 0):
-                np_hash = str(v.data.tobytes()) + str(v.shape)
-                if not key in self.cache or not self.inCache(key, np_hash):
-                    loc = self._np_home + key + '.npy'
-                    if os.path.exists(loc):
-                        os.remove(loc)
-                    self.n.write("var " + key + " = readNumpyFile( '" + loc + "' );\r\n");
-                    self.setCache(key, np_hash);
-                    global numpyFiles
-                    numpyFiles.append(loc)
 
 class NodeStdReader(Thread):
     """

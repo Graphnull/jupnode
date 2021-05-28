@@ -2,7 +2,6 @@ const vm = require('vm');
 const stream = require('stream');
 const Buffer = require('buffer').Buffer;
 const repl = require('repl');
-const pkg = require('./../package.json');
 const crypto = require('crypto');
 
 const magicNumber = crypto.randomBytes(128).toString('hex');
@@ -204,4 +203,4 @@ const startRepl = function (instream, outstream) {
 };
 
 startRepl(process.stdin, process.stdout);
-console.log(pkg.name, pkg.version, "started. Cells will run on node.js.");
+console.log("Jupnode started. Cells will run on node.js. Use %%py for use python in cell.");
