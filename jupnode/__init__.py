@@ -32,23 +32,27 @@ def modify_for_node_for_new_version(lines):
 class NodeInputTransformer():
     def __init__(self):
         self.lineNumber=0
-        print('inited')
-    
-    def wrap(self, line):
-      print(line)
-      return line
+        self.isPython=False
     def push(self, line):
+        if self.lineNumber==0 and line.strip()=='%%py':
+            self.isPython=True
+        
+        if self.isPython ==True:
+            return line
         if self.lineNumber==0:
-          return '%%node\n(async (){\n'+line
-        return line
+            nodeapp.write('(async (){\n'+line)
+        else:
+            nodeapp.write(line)
+        self.lineNumber+=1
+
+        return ''
     
     def reset(self):
         if self.lineNumber!=0:
           self.lineNumber=0
-          return '})()'
+          nodeapp.write('})()')
         self.lineNumber=0
-        print('reset')
-        """No-op - exists for compatibility."""
+        self.isPython=False
         pass
 
 if hasattr(ip, 'input_transformers_cleanup'):
