@@ -10,8 +10,9 @@ You need Node.js/npm installed. See the Node.js downloads page to find an instal
 
 # Using
 
+After this cell other cells will run on node.js.
+
 ```python
-After cells will run on node.js.
 !pip install git+https://github.com/Graphnull/jupnode
 import jupnode
 ```
