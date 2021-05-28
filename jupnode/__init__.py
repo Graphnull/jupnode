@@ -40,7 +40,7 @@ class NodeInputTransformer():
         if self.isPython ==True:
             return line
         if self.lineNumber==0:
-            nodeapp.write('(async (){\n'+line)
+            nodeapp.write('(async ()=>{\n'+line)
         else:
             nodeapp.write(line)
         self.lineNumber+=1
