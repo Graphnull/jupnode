@@ -49,6 +49,7 @@ const startRepl = function (instream, outstream) {
         result = res;
       }).catch((e) => {
         switch (e.name) {
+          case ('ReferenceError'):
           case ('Error'): {
             let stack = e.stack.split('\n').filter(v => v.trim().slice(0, 3) === 'at ');
 
@@ -69,7 +70,7 @@ const startRepl = function (instream, outstream) {
                 return v;
               }
             }).join('\n')
-            let message = 'Error: ' + e.message;
+            let message = e.name+': ' + e.message;
 
             console.log(message, '\n', newstack)
             break;
@@ -152,11 +153,17 @@ const startRepl = function (instream, outstream) {
     r.context.store = store;
     r.context.html = html;
     r.context.image = image;
-    r.context.runAsync = function run_script(command) {
+    r.context.sh = (command)=>{
+      let child_process = require('child_process')
+      let args = (Array.isArray(command)?command[0]:command).split(' ');
+      return child_process.spawnSync(args[0],  args.slice(1), {stdio: "inherit"})
+    }
+
+    r.context.shAsync = function run_script(command) {
       return new Promise((res, rej) => {
         try {
-          let args = command[0].split(' ')
-          console.log(args)
+          let args = (Array.isArray(command)?command[0]:command).split(' ')
+          let child_process = require('child_process')
           var child = child_process.spawn(args[0], args.slice(1), {
 
           });

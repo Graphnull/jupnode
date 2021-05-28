@@ -13,6 +13,10 @@ nodeapp = Node()
 def node(line, cell):
     return nodeapp.write(cell)
 
+@register_cell_magic
+def py(line, cell):
+    return cell
+
 def shutdown_hook(ipython):
     nodeapp.terminate()
     raise TryNext
@@ -35,8 +39,11 @@ class NodeInputTransformer():
         self.lineNumber=0
         self.isPython=False
     def push(self, line):
-        if self.lineNumber==0 and line.strip()=='%%py':
+        if self.lineNumber==0 and line.strip()[0:28]=='get_ipython().run_cell_magic':
             self.isPython=True
+            if line.strip()[0:40]=="get_ipython().run_cell_magic('py', '', '":
+                return '\n'.join(line.strip()[40:-2].split('\\n'))
+            return line
         
         if self.isPython ==True:
             return line
