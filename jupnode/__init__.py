@@ -44,7 +44,7 @@ class NodeInputTransformer():
             self.lines.append('(async ()=>{')
             self.lines.append(line)
         else:
-            nodeapp.write(line)
+            self.lines.append(line)
         self.lineNumber+=1
 
         return ''
@@ -62,5 +62,5 @@ class NodeInputTransformer():
 if hasattr(ip, 'input_transformers_cleanup'):
     ip.input_transformers_cleanup.append(modify_for_node_for_new_version)
 else:
-    ip.input_transformer_manager.logical_line_transforms.append(NodeInputTransformer())
+    ip.input_transformer_manager.logical_line_transforms.insert(0, NodeInputTransformer())
 
