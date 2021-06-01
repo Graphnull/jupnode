@@ -16,6 +16,6 @@ with open(os.path.dirname(os.path.abspath(__file__))+'/package.json') as f:
         author=pkg_info['author'],
         author_email=pkg_info['email'],
         license=pkg_info['license'],
-        packages=[],
+        packages=['jupnode'],
         include_package_data=False,
         zip_safe=False)
