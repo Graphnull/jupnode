@@ -81,7 +81,7 @@ class NodeStdReader(Thread):
                 if line:
                     obj = json.loads(line)
                     if obj and isinstance(obj, dict) and obj['__pyparse']:
-                        elif obj['type'] == 'html':
+                        if obj['type'] == 'html':
                             IPython.display.display(IPython.display.HTML(obj['data']))
                         elif obj['type'] == 'image':
                             IPython.display.display(IPython.display.HTML('<img src="{0}" />'.format(obj['data'])))
