@@ -45,3 +45,16 @@ console.log(globalVar, variableInCell);
 console.log(globalVar, variableInCell)
 ReferenceError: variableInCell is not defined
 ```
+
+Use "sh" global function for system operations
+
+```js
+//install npm package
+sh("npm i @tensorflow/tfjs-node");
+//or
+sh`npm i @tensorflow/tfjs-node`;
+
+//download file
+let folder = "./";
+sh`wget -nv http://pjreddie.com/media/files/VOCtrainval_06-Nov-2007.tar -P ${folder}/`;
+```
