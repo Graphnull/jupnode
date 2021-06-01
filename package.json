@@ -19,13 +19,14 @@
     "ml"
   ],
   "author": "Vasiliy Stepanov",
-  "email":"01stepvasya@gmail.com",
+  "email": "01stepvasya@gmail.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Graphnull/jupnode/issues"
   },
   "homepage": "https://github.com/Graphnull/jupnode#readme",
   "dependencies": {
+    "jupnode": "github:graphnull/jupnode",
     "sharp": "^0.28.3"
   }
 }
