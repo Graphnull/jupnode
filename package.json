@@ -1,11 +1,13 @@
 {
   "name": "jupnode",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "Run nodejs in jupyter notebook",
   "main": "jupnode/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "node ./install"
+    "install": "node ./install",
+    "prepare_py_lib":"python3 setup.py sdist --dist-dir ./",
+    "publish":"npm publish"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,5 @@
     "url": "https://github.com/Graphnull/jupnode/issues"
   },
   "homepage": "https://github.com/Graphnull/jupnode#readme",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
