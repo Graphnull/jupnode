@@ -14,6 +14,6 @@ with open('./package.json') as f:
         author=pkg_info['author'],
         author_email=pkg_info['email'],
         license=pkg_info['license'],
-        packages=find_packages(),
+        packages=[],
         include_package_data=False,
         zip_safe=False)
