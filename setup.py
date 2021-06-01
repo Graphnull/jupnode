@@ -7,7 +7,7 @@ with open('./package.json') as f:
         version=pkg_info['version'],
         description=pkg_info['description'],
         url=pkg_info['homepage'],
-        install_requires=['ipython'],
+        install_requires=[],
         package_data={
           '': ['*.js','*.json']
         },
