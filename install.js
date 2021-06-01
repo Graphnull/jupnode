@@ -5,7 +5,7 @@ let list = child_process.execSync(`pip freeze`).toString().split('\n').filter(v=
     return parseLine[0]==='jupnode'||parseLine[parseLine.length-1]==='jupnode'
 })
 
-let result = child_process.execSync(`pip install install file://`+__dirname+'/dist/jupnode-0.0.0.tar.gz')
+let result = child_process.execSync(`pip install install ./dist/jupnode-0.0.0.tar.gz`)
 
 //for debug
 // console.log(list);
