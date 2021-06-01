@@ -14,15 +14,6 @@ import IPython
 
 doneNode = False
 doneLock = ReadWriteLock()
-numpyFiles = []
-
-RESERVED = ['true', 'false','self','this','In','Out']
-
-try:
-    VARIABLE_TYPES = (str, int, float, bool, unicode, dict, list)
-except:
-    # Python 3 => no unicode type
-    VARIABLE_TYPES = (str, int, float, bool, dict, list)
 
 class VarWatcher(object):
     """
@@ -66,8 +57,6 @@ class NodeStdReader(Thread):
     Thread class that is given a process in the constructor
     the thead listens to each line coming out of the
     process's stdout and checks to see if it is JSON.
-    if it is, and it's a special Pixiedust command,
-    then the pixiedust display/print function is called
     """
 
     def __init__(self, ps, vw):
@@ -91,21 +80,11 @@ class NodeStdReader(Thread):
             try:
                 if line:
                     obj = json.loads(line)
-                    if obj and isinstance(obj, dict) and obj['_pixiedust']:
-                        if obj['type'] == 'print':
-                            print(json.dumps(obj['data']))
-                        elif obj['type'] == 'store':
-                            print('!!! Warning: store is now deprecated - Node.js global variables are automatically propagated to Python !!!')
-                            variable = 'pdf'
-                            if 'variable' in obj:
-                                variable = obj['variable']
+                    if obj and isinstance(obj, dict) and obj['__pyparse']:
                         elif obj['type'] == 'html':
                             IPython.display.display(IPython.display.HTML(obj['data']))
                         elif obj['type'] == 'image':
                             IPython.display.display(IPython.display.HTML('<img src="{0}" />'.format(obj['data'])))
-                        elif obj['type'] == 'variable':
-                            if self.vw:
-                                self.vw.setCache(obj['key'], obj['value'])
                         elif obj['type'] == 'done':
                             global doneNode
                             global doneLock
@@ -161,21 +140,13 @@ class NodeBase(object):
             os.makedirs(self.node_modules)
 
         self.node_prog = 'node'
-        self.npm_prog = 'npm'
         if platform.system() == 'Windows':
             self.node_prog += '.exe'
-            self.npm_prog += '.cmd'
 
         self.node_path = NodeBase.which(self.node_prog)
         if self.node_path is None:
             print('ERROR: Cannot find Node.js executable')
             raise FileNotFoundError('node executable not found in path')
-
-        self.npm_path = NodeBase.which(self.npm_prog)
-        if self.npm_path is None:
-            print('ERROR: Cannot find npm executable')
-            raise FileNotFoundError('npm executable not found in path')
-
         # Create popen partial, that will be used later
         popen_kwargs = {
             'stdin': subprocess.PIPE,
@@ -212,11 +183,6 @@ class Node(NodeBase):
         self.nsr = NodeStdReader(self.ps, self.vw)
 
     def terminate(self):
-        global numpyFiles
-        for i in range(len(numpyFiles)):
-            if os.path.exists(numpyFiles[i]):
-                os.remove(numpyFiles[i])
-        numpyFiles = []
         self.ps.terminate()
 
     def write(self, s):

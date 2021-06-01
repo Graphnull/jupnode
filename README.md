@@ -58,3 +58,18 @@ sh`npm i @tensorflow/tfjs-node`;
 let folder = "./";
 sh`wget -nv http://pjreddie.com/media/files/VOCtrainval_06-Nov-2007.tar -P ${folder}/`;
 ```
+
+# Formatted output
+
+Use "html" or "image" functions for formatted output
+
+```js
+//show html
+html(`<p>This is html</p>`);
+
+//show image base64
+image("data:image/jpeg;base64, LzlqLzRBQ...<!-- base64 data -->");
+
+//show image url
+image("https://kstatic.googleusercontent.com/...");
+```

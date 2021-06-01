@@ -51,13 +51,13 @@ const startRepl = function (instream, outstream) {
         switch (e.name) {
           case ('ReferenceError'):
           case ('Error'): {
+            // Improve error output
             let stack = e.stack.split('\n').filter(v => v.trim().slice(0, 3) === 'at ');
 
             newstack = stack.map(v => {
               if (v.indexOf('<anonymous>:') > -1) {
 
                 let pos = v.slice(v.indexOf('<anonymous>:') + '<anonymous>:'.length).split(':').map(v => parseInt(v))
-                //console.log(recoveryCMD)
                 let searchStr = 'evalmachine.<anonymous>:'
                 let index = v.indexOf(searchStr);
                 let lines = recoveryCMD.split('\n');
@@ -84,7 +84,7 @@ const startRepl = function (instream, outstream) {
         recoveryCMD = '';
         inRecovery = false;
 
-        const obj = { _pixiedust: true, type: 'done' };
+        const obj = { __pyparse: true, type: 'done' };
         outstream.write('\n' + JSON.stringify(obj) + '\n');
         callback(null, undefined);//result)
         
@@ -113,44 +113,21 @@ const startRepl = function (instream, outstream) {
   instream.pipe(inReplStream);
   outReplStream.pipe(outTripStream).pipe(outstream);
 
-  // custom print function for Notebook interface
-  const print = function (data) {
-    const obj = { _pixiedust: true, type: 'print', data: data };
-    outstream.write(JSON.stringify(obj) + '\n');
-  };
-
-  // custom display function for Notebook interface
-  const display = function (data) {
-    const obj = { _pixiedust: true, type: 'display', data: data };
-    outstream.write(JSON.stringify(obj) + '\n');
-
-  };
-
-  // custom display function for Notebook interface
-  const store = function (data, variable) {
-    if (!data && !variable) return;
-    const obj = { _pixiedust: true, type: 'store', data: data, variable: variable };
-    outstream.write(JSON.stringify(obj) + '\n');
-
-  };
 
   // display html in Notebook cell
   const html = function (data) {
-    const obj = { _pixiedust: true, type: 'html', data: data };
+    const obj = { __pyparse: true, type: 'html', data: data };
     outstream.write(JSON.stringify(obj) + '\n');
   };
 
   // display image in Notebook cell
   const image = function (data) {
-    const obj = { _pixiedust: true, type: 'image', data: data };
+    const obj = { __pyparse: true, type: 'image', data: data };
     outstream.write(JSON.stringify(obj) + '\n');
   };
 
   // add silverlining library and print/display
   var resetContext = function () {
-    r.context.print = print;
-    r.context.display = display;
-    r.context.store = store;
     r.context.html = html;
     r.context.image = image;
     r.context.sh = (command)=>{
