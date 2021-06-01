@@ -1,7 +1,9 @@
 from setuptools import setup, find_packages
 import json
+import os
 
-with open('./package.json') as f:
+
+with open(os.path.dirname(os.path.abspath(__file__))+'/package.json') as f:
   pkg_info = json.load(f)
   setup(name=pkg_info['name'],
         version=pkg_info['version'],

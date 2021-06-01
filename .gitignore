@@ -103,6 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-
+testenv*
 *__pycache__*
 jupnode.egg-info*
