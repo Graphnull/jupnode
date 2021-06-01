@@ -13,7 +13,7 @@ You need Node.js/npm installed. See the Node.js downloads page to find an instal
 After this cell other cells will run on node.js.
 
 ```python
-!pip install git+https://github.com/Graphnull/jupnode
+!npm i jupnode
 import jupnode
 ```
 
