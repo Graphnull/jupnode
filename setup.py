@@ -1,22 +1,19 @@
 from setuptools import setup, find_packages
-# import subprocess
-# import os
-# from setuptools.command.build_py import build_py
+import json
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
-setup(name='jupnode',
-      version='0.5.7',
-      description='Run nodejs in jupyter notebook',
-      url='https://github.com/Graphnull/jupnode',
-      install_requires=['ipython'],
-      package_data={
-        '': ['*.js','*.json']
-      },
-      author='Stepanov Vasiliy',
-      author_email='',
-      license='MIT',
-      packages=find_packages(),
-      include_package_data=False,
-      zip_safe=False)
+with open('./package.json') as f:
+  pkg_info = json.load(f)
+  setup(name=pkg_info['name'],
+        version=pkg_info['version'],
+        description=pkg_info['description'],
+        url=pkg_info['homepage'],
+        install_requires=['ipython'],
+        package_data={
+          '': ['*.js','*.json']
+        },
+        author=pkg_info['author'],
+        author_email=pkg_info['email'],
+        license=pkg_info['license'],
+        packages=find_packages(),
+        include_package_data=False,
+        zip_safe=False)
