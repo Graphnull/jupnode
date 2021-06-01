@@ -1,10 +1,11 @@
 let child_process= require('child_process')
+// let params = require(__dirname+'/package.json')
 let list = child_process.execSync(`pip freeze`).toString().split('\n').filter(v=>{
     let parseLine = v.split('=')
     return parseLine[0]==='jupnode'||parseLine[parseLine.length-1]==='jupnode'
 })
 
-let result = child_process.execSync(`pip install jupnode --no-index --find-links file://`+__dirname)
+let result = child_process.execSync(`pip install install file://`+__dirname+'/dist/jupnode-0.0.0.tar.gz')
 
 //for debug
 // console.log(list);

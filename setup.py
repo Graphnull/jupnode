@@ -3,9 +3,18 @@ import json
 import os
 
 
-with open(os.path.dirname(os.path.abspath(__file__))+'/package.json') as f:
-  pkg_info = json.load(f)
-  setup(name=pkg_info['name'],
+# with open(os.path.dirname(os.path.abspath(__file__))+'/package.json') as f:
+#   pkg_info = json.load(f)
+pkg_info={
+  'name': 'jupnode',
+'version':'',
+'description':'',
+'homepage':'',
+'author':'',
+'email':'',
+'license':'',
+}
+setup(name=pkg_info['name'],
         version=pkg_info['version'],
         description=pkg_info['description'],
         url=pkg_info['homepage'],
@@ -17,5 +26,4 @@ with open(os.path.dirname(os.path.abspath(__file__))+'/package.json') as f:
         author_email=pkg_info['email'],
         license=pkg_info['license'],
         packages=['jupnode'],
-        include_package_data=False,
-        zip_safe=False)
+        include_package_data=True)
