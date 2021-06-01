@@ -26,7 +26,5 @@
   },
   "homepage": "https://github.com/Graphnull/jupnode#readme",
   "dependencies": {
-    "jupnode": "github:graphnull/jupnode",
-    "sharp": "^0.28.3"
   }
 }
