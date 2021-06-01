@@ -2,7 +2,7 @@
   "name": "jupnode",
   "version": "0.5.7",
   "description": "Run nodejs in jupyter notebook",
-  "main": "index.js",
+  "main": "jupnode/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

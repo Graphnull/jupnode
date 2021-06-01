@@ -149,11 +149,9 @@ class NodeBase(object):
         """
         Establishes the Node's home directories and executable paths
         """
-        # get the home directory
-        # home = Environment.pixiedustHome
    
         # Node home directory
-        self.node_home = 'node'
+        self.node_home = os.getcwd()
         if not os.path.exists(self.node_home):
             os.makedirs(self.node_home)
 
