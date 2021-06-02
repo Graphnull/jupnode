@@ -106,3 +106,4 @@ testenv*
 *__pycache__*
 jupnode.egg-info*
 package-lock.json
+jupnode

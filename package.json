@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "node ./install",
-    "prepare_py_lib": "rm -rf jupnode.egg-info && npm i && python3 setup.py sdist --dist-dir ./",
+    "webpack": "webpack",
+    "prepare_py_lib": "node ./build.js",
     "publish": "npm run prepare_py_lib && npm publish"
   },
   "repository": {
@@ -27,8 +28,11 @@
     "url": "https://github.com/Graphnull/jupnode/issues"
   },
   "homepage": "https://github.com/Graphnull/jupnode#readme",
-  "dependencies": {
-    "@babel/generator": "7.14.3",
-    "@babel/parser": "7.14.4"
+  "devDependencies": {
+    "@babel/generator": "^7.14.3",
+    "@babel/parser": "^7.14.4",
+    "copy-webpack-plugin": "^9.0.0",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0"
   }
 }

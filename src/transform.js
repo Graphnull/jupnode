@@ -6,8 +6,9 @@ module.exports = (code) => {
 
     const ast = parse(code, { errorRecovery: true, allowAwaitOutsideFunction: true });
 
+    let body = ast.program.body
     //set all var variables in top level as global variables
-    ast.program.body.forEach(expr => {
+    body.forEach(expr => {
         if (expr.type === 'VariableDeclaration' && expr.kind === 'var') {
             expr.kind = ''
         }
@@ -15,10 +16,12 @@ module.exports = (code) => {
 
     // print last variable or expression
     if (
-        ast.program.body[ast.program.body.length - 1].type !== 'ReturnStatement' &&
-        ast.program.body[ast.program.body.length - 1].type !== 'ThrowStatement'
+        body[body.length - 1] &&
+        body[body.length - 1].type !== 'ReturnStatement' &&
+        body[body.length - 1].type !== 'ThrowStatement' &&
+        body[body.length - 1].type !== 'VariableDeclaration'
     ) {
-        ast.program.body[ast.program.body.length - 1] = {
+        body[body.length - 1] = {
             type: "ReturnStatement",
             start: 0,
             end: 0,
@@ -32,7 +35,7 @@ module.exports = (code) => {
                     column: 0
                 }
             },
-            "argument": ast.program.body[ast.program.body.length - 1]
+            "argument": body[body.length - 1]
         }
     }
     let generated = generate(ast, code);
