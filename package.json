@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "node ./install",
-    "prepare_py_lib": "rm -rf jupnode.egg-info && python3 setup.py sdist --dist-dir ./",
+    "prepare_py_lib": "rm -rf jupnode.egg-info && npm i && python3 setup.py sdist --dist-dir ./",
     "publish": "npm run prepare_py_lib && npm publish"
   },
   "repository": {

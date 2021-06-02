@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 import json
 import os
+from glob import glob
 
 
 # with open(os.path.dirname(os.path.abspath(__file__))+'/package.json') as f:
@@ -22,6 +23,9 @@ setup(name=pkg_info['name'],
         package_data={
           '': ['*.js','*.json']
         },
+        data_files = [
+          ('node_modules', glob('node_modules/**/*', recursive=True)),
+        ],
         author=pkg_info['author'],
         author_email=pkg_info['email'],
         license=pkg_info['license'],
