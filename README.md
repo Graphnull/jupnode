@@ -32,18 +32,20 @@ fs = require("fs");
 await fs.promises.readFile("example.txt");
 ```
 
-Use variables without var, let, const for global usage. Use var, let, const variables for local usage in cell
+Use var for global usage. Use let, const variables for local usage in cell
 
 ```js
-globalVar = 1;
+var globalVar = 1;
 let variableInCell = 2;
 console.log(globalVar, variableInCell);
 // 1 2
 ```
 
 ```js
-console.log(globalVar, variableInCell)
-ReferenceError: variableInCell is not defined
+// 1
+console.log(globalVar);
+console.log(variableInCell);
+// ReferenceError: variableInCell is not defined
 ```
 
 Use "sh" global function for system operations

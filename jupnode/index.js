@@ -3,6 +3,7 @@ const stream = require('stream');
 const Buffer = require('buffer').Buffer;
 const repl = require('repl');
 const crypto = require('crypto');
+const transformCode = require('./transform')
 
 const magicNumber = crypto.randomBytes(128).toString('hex');
 const magicNumberCommandBytes = Buffer.from(`\n\nconsole.log( '${magicNumber}' );\r\n`, 'utf8');
@@ -36,21 +37,16 @@ const startRepl = function (instream, outstream) {
   var recoveryCMD = '';
   async function replEval(cmd, context, filename, callback) {
     if (cmd.includes(magicNumber.toString('utf-8'))) {
-      let resultFunc = async function () {
-        try {
-          let r = await vm.runInContext(recoveryCMD, context);
-        } catch (err) {
-          throw err;
-        }
-        return r;
-      };
-      var result;
-      resultFunc().then((res) => {
-        result = res;
-      }).catch((e) => {
+      let transformedCode;
+      try {
+        transformedCode = transformCode(recoveryCMD)
+        let result = await vm.runInContext(transformedCode, context);
+        if(result!==undefined){console.log(result)}
+      } catch (e) {
         switch (e.name) {
           case ('ReferenceError'):
           case ('Error'): {
+            console.log('orig:', e);
             // Improve error output
             let stack = e.stack.split('\n').filter(v => v.trim().slice(0, 3) === 'at ');
 
@@ -60,7 +56,7 @@ const startRepl = function (instream, outstream) {
                 let pos = v.slice(v.indexOf('<anonymous>:') + '<anonymous>:'.length).split(':').map(v => parseInt(v))
                 let searchStr = 'evalmachine.<anonymous>:'
                 let index = v.indexOf(searchStr);
-                let lines = recoveryCMD.split('\n');
+                let lines = (transformedCode||recoveryCMD).split('\n');
 
                 if (lines[pos[0] - 1].slice(0, 4) === '})()') {
                   return '';
@@ -70,7 +66,7 @@ const startRepl = function (instream, outstream) {
                 return v;
               }
             }).join('\n')
-            let message = e.name+': ' + e.message;
+            let message = e.name + ': ' + e.message;
 
             console.log(message, '\n', newstack)
             break;
@@ -79,16 +75,14 @@ const startRepl = function (instream, outstream) {
             console.log(e)
           }
         }
-        //console.log(e);
-      }).finally(() => {
-        recoveryCMD = '';
-        inRecovery = false;
+      }
+      recoveryCMD = '';
+      inRecovery = false;
 
-        const obj = { __pyparse: true, type: 'done' };
-        outstream.write('\n' + JSON.stringify(obj) + '\n');
-        callback(null, undefined);//result)
-        
-      });
+      const obj = { __pyparse: true, type: 'done' };
+      outstream.write('\n' + JSON.stringify(obj) + '\n');
+      callback(null, undefined);
+
     } else {
       recoveryCMD += cmd;
       callback(null, undefined);
@@ -130,16 +124,16 @@ const startRepl = function (instream, outstream) {
   var resetContext = function () {
     r.context.html = html;
     r.context.image = image;
-    r.context.sh = (command)=>{
+    r.context.sh = (command) => {
       let child_process = require('child_process')
-      let args = (Array.isArray(command)?command[0]:command).split(' ');
-      return child_process.spawnSync(args[0],  args.slice(1), {stdio: "inherit"})
+      let args = (Array.isArray(command) ? command[0] : command).split(' ');
+      return child_process.spawnSync(args[0], args.slice(1), { stdio: "inherit" })
     }
 
     r.context.shAsync = function run_script(command) {
       return new Promise((res, rej) => {
         try {
-          let args = (Array.isArray(command)?command[0]:command).split(' ')
+          let args = (Array.isArray(command) ? command[0] : command).split(' ')
           let child_process = require('child_process')
           var child = child_process.spawn(args[0], args.slice(1), {
 
