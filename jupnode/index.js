@@ -46,7 +46,6 @@ const startRepl = function (instream, outstream) {
         switch (e.name) {
           case ('ReferenceError'):
           case ('Error'): {
-            console.log('orig:', e);
             // Improve error output
             let stack = e.stack.split('\n').filter(v => v.trim().slice(0, 3) === 'at ');
 
