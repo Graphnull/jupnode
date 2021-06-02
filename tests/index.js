@@ -2,6 +2,9 @@ let child_process = require('child_process')
 
 let node = child_process.spawn('node', ['./src/index.js'], { cwd: './' })
 
+child_process.execSync('npm i @tensorflow/tfjs')
+
+
 let list = [
     { input: 'let t = 23; t;', output: 'Jupnode started. Cells will run on node.js. Use %%py for use python in cell.\n23' },
     { input: 'var r = 32;', output: '' },
@@ -26,8 +29,15 @@ let list = [
     console.log(_i2);}catch(err){
         return err.message
     }`, output: '_i2 is not defined' },
-  
-    
+    { input: `html('<div>123</div>')`, output: '{"__pyparse":true,"type":"html","data":"<div>123</div>"}' },
+    { input: `
+    tf = require('@tensorflow/tfjs')
+    let o = new Float32Array([1,2,3,4])
+    let t = tf.tensor(o,[2,2],'float32')
+    t.dataSync()[0]
+    `, output: '1' },
+ 
+
 ]
 
 let iter = 0;

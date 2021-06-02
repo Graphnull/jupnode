@@ -40,7 +40,7 @@ const startRepl = function (instream, outstream) {
       let transformedCode;
       try {
         transformedCode = transformCode(recoveryCMD)
-        let result = await vm.runInContext(transformedCode, context);
+        let result = await vm.runInThisContext(transformedCode);
         if(result!==undefined){console.log(result)}
       } catch (e) {
         switch (e.name) {
@@ -93,7 +93,8 @@ const startRepl = function (instream, outstream) {
     output: outReplStream,
     prompt: '',
     eval: replEval,
-    writer: writer
+    writer: writer,
+    useGlobal:true,
   });
 
   var outTripStream = new stream.Transform();
@@ -121,15 +122,15 @@ const startRepl = function (instream, outstream) {
 
   // add silverlining library and print/display
   var resetContext = function () {
-    r.context.html = html;
-    r.context.image = image;
-    r.context.sh = (command) => {
+    global.html = html;
+    global.image = image;
+    global.sh = (command) => {
       let child_process = require('child_process')
       let args = (Array.isArray(command) ? command[0] : command).split(' ');
       return child_process.spawnSync(args[0], args.slice(1), { stdio: "inherit" })
     }
 
-    r.context.shAsync = function run_script(command) {
+    global.shAsync = function run_script(command) {
       return new Promise((res, rej) => {
         try {
           let args = (Array.isArray(command) ? command[0] : command).split(' ')
