@@ -1,6 +1,6 @@
 {
   "name": "jupnode",
-  "version": "0.5.13",
+  "version": "0.5.14",
   "description": "Run nodejs in jupyter notebook",
   "main": "jupnode/index.js",
   "scripts": {
