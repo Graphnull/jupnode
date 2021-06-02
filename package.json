@@ -4,7 +4,7 @@
   "description": "Run nodejs in jupyter notebook",
   "main": "jupnode/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ./tests/index.js",
     "install": "node ./install",
     "webpack": "webpack",
     "prepare_py_lib": "node ./build.js",

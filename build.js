@@ -1,5 +1,6 @@
 let child_process= require('child_process')
 
+child_process.execSync(`npm run test`)
 child_process.execSync(`rm -rf jupnode.egg-info`)
 let packages = []
 let pkg = require('./package.json');
