@@ -13,13 +13,9 @@ module.exports = (code) => {
             expr.kind = ''
         }
     })
-
     // print last variable or expression
     if (
-        body[body.length - 1] &&
-        body[body.length - 1].type !== 'ReturnStatement' &&
-        body[body.length - 1].type !== 'ThrowStatement' &&
-        body[body.length - 1].type !== 'VariableDeclaration'
+        body[body.length - 1].type === 'ExpressionStatement'
     ) {
         body[body.length - 1] = {
             type: "ReturnStatement",

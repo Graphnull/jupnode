@@ -6,6 +6,7 @@ let list = [
     { input: 'let t = 23; t;', output: 'Jupnode started. Cells will run on node.js. Use %%py for use python in cell.\n23' },
     { input: 'var r = 32;', output: '' },
     { input: 'r;', output: '32' },
+    { input: '(()=>56)()', output: '56' },
     { input: `let fs = require('fs');
     let files = await fs.promises.readdir('./');
     files.length>0
@@ -18,6 +19,15 @@ let list = [
     `, output: '' },
     { input: `global89    `, output: '89' },
     { input: `console.log(global89)`, output: '89' },
+    { input: `for(var _i1 = 0; _i1 < 5; _i1++) {}
+    //Переменная i доступна за пределами цикла
+    console.log(_i1);`, output: '5' },
+    { input: `try{for(let _i2 = 0; _i2 < 5; _i2++) {}
+    console.log(_i2);}catch(err){
+        return err.message
+    }`, output: '_i2 is not defined' },
+  
+    
 ]
 
 let iter = 0;
