@@ -62,6 +62,15 @@ let list = [
     { input: `let balance=777;class Money{ print(){console.log(balance+"$")}};let money = new Money();money.print()`, output: '777$' },
     { input: `money.print()`, output: '777$' },
     { input: `console.log(Money)`, output: '[class Money]' },
+
+    // test all global variables
+    { input: `var a = 1;`, output: '' },
+    { input: `console.log(a);`, output: '1' },
+    { input: `let a = 1;`, output: '' },
+    { input: `console.log(a);`, output: '1' },
+    { input: `const a = 1;`, output: '' },
+    { input: `console.log(a);`, output: '1' },
+
 ]
 
 let iter = 0;
