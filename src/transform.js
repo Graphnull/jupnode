@@ -4,10 +4,10 @@ const generate = require('@babel/generator').default;
 module.exports = (code) => {
 
 
-    const ast = parse(code, { errorRecovery: false, allowAwaitOutsideFunction: true, allowReturnOutsideFunction:true});
+    const ast = parse(code, { errorRecovery: false, allowAwaitOutsideFunction: true, allowReturnOutsideFunction: true });
 
 
-    let body = ast.program.body
+    let body = ast.program.body;
     //set all var variables in top level as global variables
     body.forEach(expr => {
         if (expr.type === 'VariableDeclaration') {
@@ -26,8 +26,26 @@ module.exports = (code) => {
             "argument": expr
         }
     }
-    let generated = generate(ast, {});
-    return '(async()=>{\n' + generated.code + '\n})();';
+    let funcAndClassDeclarations = [];
+    let asyncExpressions = []
+    body.forEach(astBranch => {
+        ast.program.body = [astBranch]
+        let generated = generate(ast, {});
+        if (
+            astBranch.type === 'FunctionDeclaration' ||
+            astBranch.type === 'ClassDeclaration'
+        ) {
+            funcAndClassDeclarations.push(generated.code)
+        } else {
+            asyncExpressions.push(generated.code)
+        }
+    })
+
+    let outProgram = ''
+    outProgram += funcAndClassDeclarations.join('\n')
+    outProgram += '(async()=>{\n' + asyncExpressions.join('\n') + '\n})();'
+
+    return outProgram;
 }
 
 
