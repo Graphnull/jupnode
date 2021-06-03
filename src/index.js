@@ -1,3 +1,6 @@
+if(process.env.__DEBUGJUPNODE === 'true'){
+  global.__DEBUGJUPNODE = true
+}
 const vm = require('vm');
 const stream = require('stream');
 const transformCode = require('./transform')

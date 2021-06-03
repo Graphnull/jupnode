@@ -1,8 +1,9 @@
 let child_process = require('child_process')
+process.env.__DEBUGJUPNODE='true';
 
 let node = child_process.spawn('node', ['../src/index.js'], { cwd: './' })
 
-child_process.execSync('npm i @tensorflow/tfjs')
+child_process.execSync('npm i @tensorflow/tfjs --no-save')
 
 
 let list = [
@@ -28,7 +29,7 @@ let list = [
     { input: `console.log(global89)`, output: '89' },
     {
         input: `for(var _i1 = 0; _i1 < 5; _i1++) {}
-    //Переменная i доступна за пределами цикла
+    //Переменная _i1 доступна за пределами цикла
     console.log(_i1);`, output: '5'
     },
     {
@@ -56,7 +57,11 @@ let list = [
     out1
     `, output: 'b'
     },
-
+    { input: `let t = 5;function func(){console.log('!!'+5)};func()`, output: '!!5' },
+    { input: `func()`, output: '!!5' },
+    { input: `let balance=777;class Money{ print(){console.log(balance+"$")}};let money = new Money();money.print()`, output: '777$' },
+    { input: `money.print()`, output: '777$' },
+    { input: `console.log(Money)`, output: '[class Money]' },
 ]
 
 let iter = 0;
@@ -97,7 +102,7 @@ node.stdout.on('data', (data) => {
 
 let errorMessage = ''
 node.stderr.on('data', (data) => {
-    errorMessage+= String(data);
+    errorMessage += String(data);
 })
 node.on('close', (code) => {
     console.log(`child process exited with code ${code}: ${errorMessage}`);
@@ -105,6 +110,6 @@ node.on('close', (code) => {
 
 node.stdin.write(list[0].input)
 
-setTimeout(()=>{
+setTimeout(() => {
     throw new Error('timeout error!')
-},1000)
+}, 1000)
