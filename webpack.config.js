@@ -1,19 +1,23 @@
 const path = require('path');
-const CopyPlugin = require("copy-webpack-plugin");
 
-module.exports = {
+// pack babel libs from using in python lib
+module.exports = [{
     mode: 'production',
-    entry: './src/index.js',
+    entry: './node_modules/@babel/parser/lib/index.js',
     target: 'node',
-    plugins: [
-        new CopyPlugin({
-          patterns: [
-             {from:'src',filter:(path)=>path.match(/\.py$/)}
-          ]
-        })
-    ],
     output: {
-        filename: 'index.js',
-        path: path.resolve(__dirname, 'jupnode'),
+        library:{type:'commonjs'},
+        filename: '@babel_parser.js',
+        path: path.resolve(__dirname, 'src'),
     },
-};
+},{
+    mode: 'production',
+    entry: './node_modules/@babel/generator/lib/index.js',
+    target: 'node',
+    output: {
+        library:{type:'commonjs'},
+        filename: '@babel_generator.js',
+        path: path.resolve(__dirname, 'src'),
+    },
+}
+];

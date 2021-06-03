@@ -1,6 +1,6 @@
 {
   "name": "jupnode",
-  "version": "0.5.16",
+  "version": "0.5.17",
   "description": "Run nodejs in jupyter notebook",
   "main": "jupnode/index.js",
   "scripts": {
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@babel/generator": "^7.14.3",
     "@babel/parser": "^7.14.4",
-    "copy-webpack-plugin": "^9.0.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"
   },

@@ -1,5 +1,5 @@
-const { parse } = require("@babel/parser");
-const generate = require('@babel/generator').default;
+const { parse } = require("./@babel_parser");
+const generate = require('./@babel_generator').default;
 
 var fs = require('fs');
 var log = null;

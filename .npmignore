@@ -108,4 +108,3 @@ jupnode.egg-info*
 images
 tests
 package-lock.json
-jupnode

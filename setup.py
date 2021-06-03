@@ -28,5 +28,8 @@ setup(name=pkg_info['name'],
         author=pkg_info['author'],
         author_email=pkg_info['email'],
         license=pkg_info['license'],
-        packages=['jupnode'],
+        packages=['jupnode', 'src'],
+        package_dir={
+        'jupnode': 'src',
+    },
         include_package_data=False)
