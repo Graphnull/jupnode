@@ -4,7 +4,7 @@
   "description": "Run nodejs in jupyter notebook",
   "main": "jupnode/index.js",
   "scripts": {
-    "test": "node ./tests/index.js",
+    "test": "cd ./tests && node ./index.js",
     "install": "node ./install",
     "webpack": "webpack",
     "prepare_py_lib": "node ./build.js",
@@ -35,7 +35,5 @@
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"
   },
-  "dependencies": {
-    "@tensorflow/tfjs": "^3.6.0"
-  }
+  "dependencies": {}
 }

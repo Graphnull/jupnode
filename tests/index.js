@@ -1,49 +1,61 @@
 let child_process = require('child_process')
 
-let node = child_process.spawn('node', ['./src/index.js'], { cwd: './' })
+let node = child_process.spawn('node', ['../src/index.js'], { cwd: './' })
 
 child_process.execSync('npm i @tensorflow/tfjs')
 
 
-let list = [ 
+let list = [
     { input: 'let t = 23; t;', output: '23' },
     { input: 'var r = 32;', output: '' },
     { input: 'r;', output: '32' },
     { input: '(()=>56)()', output: '56' },
-    { input: `let fs = require('fs');
+    {
+        input: `let fs = require('fs');
     let files = await fs.promises.readdir('./');
     files.length>0
-    `, output: 'true' },
-    { input: `var global89=0;
+    `, output: 'true'
+    },
+    {
+        input: `var global89=0;
     let changeFunc=()=>{
         global89= 89
     }
     changeFunc();
-    `, output: '' },
+    `, output: ''
+    },
     { input: `global89    `, output: '89' },
     { input: `console.log(global89)`, output: '89' },
-    { input: `for(var _i1 = 0; _i1 < 5; _i1++) {}
+    {
+        input: `for(var _i1 = 0; _i1 < 5; _i1++) {}
     //Переменная i доступна за пределами цикла
-    console.log(_i1);`, output: '5' },
-    { input: `try{for(let _i2 = 0; _i2 < 5; _i2++) {}
+    console.log(_i1);`, output: '5'
+    },
+    {
+        input: `try{for(let _i2 = 0; _i2 < 5; _i2++) {}
     console.log(_i2);}catch(err){
         return err.message
-    }`, output: '_i2 is not defined' },
+    }`, output: '_i2 is not defined'
+    },
     { input: `html('<div>123</div>')`, output: '{"__pyparse":true,"type":"html","data":"<div>123</div>"}' },
-    { input: `
+    {
+        input: `
     tf = require('@tensorflow/tfjs')
     let o = new Float32Array([1,2,3,4])
     let t = tf.tensor(o,[2,2],'float32')
     t.dataSync()[0]
-    `, output: '1' },
-   
- { input: `
+    `, output: '1'
+    },
+
+    {
+        input: `
  
     let str = 'a_b_c_d';
     let out1 = str.split('_')
         .slice(1)[0];
     out1
-    `, output: 'b' },
+    `, output: 'b'
+    },
 
 ]
 
@@ -60,7 +72,7 @@ node.stdout.on('data', (data) => {
         let result = filtered.join('\n');
 
         if (list[iter].output !== result) {
-            console.error(list[iter].output + '!==' + result+':'+list[iter].input);
+            console.error(list[iter].output + '!==' + result + ':' + list[iter].input);
             process.exit(1);
         } else {
             iter++;
@@ -83,4 +95,16 @@ node.stdout.on('data', (data) => {
     }
 })
 
+let errorMessage = ''
+node.stderr.on('data', (data) => {
+    errorMessage+= String(data);
+})
+node.on('close', (code) => {
+    console.log(`child process exited with code ${code}: ${errorMessage}`);
+});
+
 node.stdin.write(list[0].input)
+
+setTimeout(()=>{
+    throw new Error('timeout error!')
+},1000)
