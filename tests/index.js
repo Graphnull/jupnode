@@ -5,8 +5,8 @@ let node = child_process.spawn('node', ['./src/index.js'], { cwd: './' })
 child_process.execSync('npm i @tensorflow/tfjs')
 
 
-let list = [
-    { input: 'let t = 23; t;', output: 'Jupnode started. Cells will run on node.js. Use %%py for use python in cell.\n23' },
+let list = [ 
+    { input: 'let t = 23; t;', output: '23' },
     { input: 'var r = 32;', output: '' },
     { input: 'r;', output: '32' },
     { input: '(()=>56)()', output: '56' },
@@ -36,7 +36,14 @@ let list = [
     let t = tf.tensor(o,[2,2],'float32')
     t.dataSync()[0]
     `, output: '1' },
+   
+ { input: `
  
+    let str = 'a_b_c_d';
+    let out1 = str.split('_')
+        .slice(1)[0];
+    out1
+    `, output: 'b' },
 
 ]
 
