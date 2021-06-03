@@ -78,7 +78,7 @@ const image = function (data) {
 };
 // add print/display/execute functions
 var resetContext = function () {
-  global.require = require;
+  global.require = (path)=>require(require.resolve(path,{paths:[process.cwd()]}));
   global.html = html;
   global.image = image;
   global.sh = (command) => {
