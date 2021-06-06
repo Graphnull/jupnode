@@ -4,6 +4,7 @@ if(process.env.__DEBUGJUPNODE === 'true'){
 const vm = require('vm');
 const stream = require('stream');
 const transformCode = require('./transform')
+let inspect = require('./inspect')
 
 
 let instream = process.stdin
@@ -18,7 +19,9 @@ inReplStream._transform = async function (chunk, encoding, done) {
       transformedCode = transformCode(cell)
       let result = await vm.runInThisContext(transformedCode);
       if (result !== undefined) { console.log(result) }
+      await inspect.stopProfiler();
     } catch (e) {
+      inspect.stopProfiler();
       switch (e.name) {
         case ('ReferenceError'):
         case ('Error'): {
@@ -125,6 +128,9 @@ var resetContext = function () {
 
     })
   };
+  global.profiler = inspect.profiler;
+  global.stopProfiler = inspect.stopProfiler;
+
   lastGlobal = {};
 };
 

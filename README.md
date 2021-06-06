@@ -75,3 +75,17 @@ image("data:image/jpeg;base64, LzlqLzRBQ...<!-- base64 data -->");
 //show image url
 image("https://kstatic.googleusercontent.com/...");
 ```
+
+# Profiling
+
+Enable profiling for cell and save result as "profile.log" file after cell
+```
+await profiler('./profile.log');
+
+```
+
+Enable profile.log file into Chrome dev tools
+![loadprofiler](images/loadprofiler.png)
+
+Example profile.log
+![profiler](images/profiler.png)

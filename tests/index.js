@@ -70,6 +70,17 @@ let list = [
     { input: `console.log(a);`, output: '1' },
     { input: `const a = 1;`, output: '' },
     { input: `console.log(a);`, output: '1' },
+    { input: `async function asyncfunc(){console.log(53)}`, output: '' },
+    { input: `await asyncfunc()`, output: '53' },
+    { input: `await profiler('./profile.log');
+    fs.writeFileSync('./test.log',new Buffer(1024*1024*10));
+    await stopProfiler();
+    fs.unlinkSync('./test.log');
+    console.log(fs.existsSync('./profile.log'));
+    fs.unlinkSync('profile.log');
+    console.log(fs.existsSync('./profile.log'));
+    `, output: 'true\nfalse' },
+
 
 ]
 
