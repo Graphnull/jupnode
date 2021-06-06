@@ -84,8 +84,10 @@ await profiler('./profile.log');
 
 ```
 
-Enable profile.log file into Chrome dev tools
+Load profile.log file into Chrome dev tools
+
 ![loadprofiler](images/loadprofiler.png)
 
 Example profile.log
+
 ![profiler](images/profiler.png)
