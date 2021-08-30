@@ -36,7 +36,7 @@ inReplStream._transform = async function (chunk, encoding, done) {
               let index = v.indexOf(searchStr);
               let lines = (transformedCode || cell).split('\n');
 
-              if (lines[pos[0] - 1].slice(0, 4) === '})()') {
+              if (lines[pos[0] - 1]&&lines[pos[0] - 1].slice(0, 4) === '})()') {
                 return '';
               }
               return v.slice(0, index) + lines[pos[0] - 1] + v.slice(index + searchStr.length + v.slice(index + searchStr.length).indexOf(':'));
