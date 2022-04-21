@@ -15,6 +15,7 @@ import IPython
 doneNode = False
 doneLock = ReadWriteLock()
 
+'''
 class VarWatcher(object):
     """
     this class watches for cell "post_execute" events. When one occurs, it examines
@@ -52,6 +53,8 @@ class VarWatcher(object):
             v = self.shell.user_ns[key]
             t = type(v)
 
+'''
+
 class NodeStdReader(Thread):
     """
     Thread class that is given a process in the constructor
@@ -59,11 +62,11 @@ class NodeStdReader(Thread):
     process's stdout and checks to see if it is JSON.
     """
 
-    def __init__(self, ps, vw):
+    def __init__(self, ps):
         super(NodeStdReader, self).__init__()
         self._stop_event = Event()
         self.ps = ps
-        self.vw = vw
+        os.set_blocking(ps.stdout.fileno(), False)
         self.daemon = True
         self.start()
 
@@ -75,6 +78,9 @@ class NodeStdReader(Thread):
         while not self._stop_event.is_set():
             # read line from Node's stdout
             line = self.ps.stdout.readline()
+            if len(line) is 0:
+                time.sleep(0.01)
+                continue
             # see if it parses as JSON
             obj = None
             try:
@@ -177,10 +183,10 @@ class Node(NodeBase):
         #print ("Node process id", self.ps.pid)
 
         # watch Python variables for changes
-        self.vw = VarWatcher(get_ipython(), self.ps, self)
+        #self.vw = VarWatcher(get_ipython(), self.ps, self)
 
         # create thread to read this process's output
-        self.nsr = NodeStdReader(self.ps, self.vw)
+        self.nsr = NodeStdReader(self.ps)
 
     def terminate(self):
         self.ps.terminate()
@@ -212,6 +218,7 @@ class Node(NodeBase):
                 doneLock.release_write()
                 return
         while True:
+            time.sleep(0.01)
             flag = False
             doneLock.acquire_read()
             flag = doneNode
@@ -224,7 +231,7 @@ class Node(NodeBase):
 
     def clear(self):
         self.write("\r\n.clear")
-        self.vw.clearCache()
+        #self.vw.clearCache()
 
     def help(self):
         self.cancel()
